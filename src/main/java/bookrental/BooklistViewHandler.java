@@ -12,12 +12,6 @@ import java.util.Optional;
 
 @Service
 public class BooklistViewHandler {
-
-
     @Autowired
     private BooklistRepository booklistRepository;
-
-
-
-
 }

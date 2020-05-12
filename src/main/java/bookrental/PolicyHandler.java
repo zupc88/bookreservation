@@ -10,19 +10,43 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PolicyHandler{
-    
+
+    @Autowired
+    ReservationRepository reservationRepository;
+
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverRevfailed_Statusupdate(@Payload Revfailed revfailed){
-
         if(revfailed.isMe()){
-            System.out.println("##### listener Statusupdate : " + revfailed.toJson());
+            System.out.println("##### Revfailed ##### : " + revfailed.toJson());
         }
     }
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverRevcanceled_Statusupdate(@Payload Revcanceled revcanceled){
-
         if(revcanceled.isMe()){
-            System.out.println("##### listener Statusupdate : " + revcanceled.toJson());
+            System.out.println("##### revcanceled ##### : " + revcanceled.toJson());
+            reservationRepository.findByBookId(revcanceled.getBookid())
+                    .ifPresent(
+                            reservation -> {
+                                reservation.setStatus("Canceled");
+                                reservationRepository.save(reservation);
+                            }
+                    );
+            ;
+        }
+    }
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverRevsuccessed_Statusupdate(@Payload Revsuccessed revsuccessed){
+        if(revsuccessed.isMe()){
+            System.out.println("##### Successed ##### : " + revsuccessed.toJson());
+            reservationRepository.findByBookId(revsuccessed.getBookid())
+                    .ifPresent(
+                            reservation -> {
+                                reservation.setStatus("Successed");
+                                reservationRepository.save(reservation);
+                            }
+                    );
+            ;
         }
     }
 

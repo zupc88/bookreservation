@@ -1,7 +1,16 @@
 package bookrental;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cloud.stream.messaging.Processor;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.util.MimeTypeUtils;
+
 import java.util.List;
 
 @Entity
@@ -18,24 +27,50 @@ public class Reservation {
     @PostPersist
     public void onPostPersist(){
         Requested requested = new Requested();
-        BeanUtils.copyProperties(this, requested);
-        requested.publishAfterCommit();
+        requested.setOrderId(this.getId());
+        requested.setUserid(this.getUserid());
+        requested.setBookid(this.getBookid());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = null;
 
+        try {
+            json = objectMapper.writeValueAsString(requested);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON format exception", e);
+        }
 
-        Canceled canceled = new Canceled();
-        BeanUtils.copyProperties(this, canceled);
-        canceled.publishAfterCommit();
+        Processor processor = Application.applicationContext.getBean(Processor.class);
+        MessageChannel outputChannel = processor.output();
 
-
+        outputChannel.send(MessageBuilder
+                .withPayload(json)
+                .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                .build());
     }
 
     @PostUpdate
     public void onPostUpdate(){
         Reserved reserved = new Reserved();
-        BeanUtils.copyProperties(this, reserved);
-        reserved.publishAfterCommit();
+        reserved.setOrderId(this.getId());
+        reserved.setUserid(this.getUserid());
+        reserved.setBookid(this.getBookid());
+        reserved.setStatus(this.getStatus());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = null;
 
+        try {
+            json = objectMapper.writeValueAsString(reserved);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON format exception", e);
+        }
 
+        Processor processor = Application.applicationContext.getBean(Processor.class);
+        MessageChannel outputChannel = processor.output();
+
+        outputChannel.send(MessageBuilder
+                .withPayload(json)
+                .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                .build());
     }
 
 

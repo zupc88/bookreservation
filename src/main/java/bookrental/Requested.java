@@ -15,7 +15,7 @@ public class Requested extends AbstractEvent {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setOrderId(Long id) {
         this.id = id;
     }
     public String getUserid() {
