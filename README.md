@@ -2,8 +2,6 @@
 
 # 예제 - 도서 대여 시스템
 
-본 예제는 MSA/DDD/Event Storming/EDA 를 포괄하는 분석/설계/구현/운영 전단계를 커버하도록 구성한 예제입니다.
-이는 클라우드 네이티브 애플리케이션의 개발에 요구되는 체크포인트들을 통과하기 위한 예시 답안을 포함합니다.
 - 체크포인트 : https://workflowy.com/s/assessment-check-po/T5YrzcMewfo4J6LW
 
 
@@ -111,7 +109,7 @@
 # 분석/설계
 
 ## TO-BE 조직 (Vertically-Aligned)
-![image](https://user-images.githubusercontent.com/63623995/81628944-ffdf6300-943c-11ea-85b2-8af449b04f63.png)
+![image](https://user-images.githubusercontent.com/63623995/81637021-3e324d80-9450-11ea-92f6-a8a9b61f2950.png)
 
 
 ## Event Storming 결과
@@ -154,9 +152,9 @@
 
 - 고객이 예약 취소 시 고객 관리 서비스 통해 알람 발송되도록 비동기식 커넥션 추가
 - 각 Aggregte Attribute
-  - bookreservation : orderid, userid, bookid, status
-  - stockmanagement : bookid, qty
-  - customermanagement : orderid, userid, bookid, status
+  - reservation : orderid, userid, bookid, status
+  - stock : bookid, qty
+  - customer : orderid, userid, bookid, status
 
 ### 완성본에 대한 기능적/비기능적 요구사항을 커버하는지 검증
 
