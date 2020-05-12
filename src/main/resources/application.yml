@@ -17,8 +17,6 @@ spring:
           destination: bookrental
           contentType: application/json
 ---
-server:
-  port: 8081
 
 spring:
   profiles: docker
