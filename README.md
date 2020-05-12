@@ -109,7 +109,7 @@
 # 분석/설계
 
 ## TO-BE 조직 (Vertically-Aligned)
-![image](https://user-images.githubusercontent.com/63623995/81637021-3e324d80-9450-11ea-92f6-a8a9b61f2950.png)
+![image](https://user-images.githubusercontent.com/63623995/81637644-cf55f400-9451-11ea-9cf3-1b599eb21e5d.png)
 
 
 ## Event Storming 결과
