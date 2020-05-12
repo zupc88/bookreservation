@@ -1,0 +1,16 @@
+apiVersion : apps/v1beta1
+kind: Deployment
+metadata:
+  name: reservation
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: reservation
+    spec:
+      containers:
+        - name: reservation
+          image: ccteam4acr.azurecr.io/reservation
+          ports:
+            - containerPort: 8081
