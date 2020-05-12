@@ -145,7 +145,11 @@
 
 ![image](https://user-images.githubusercontent.com/63623995/81631247-631fc400-9442-11ea-91d9-feca89fdb137.png)
 
-- View Model 추가
+- 도서 재고 리스트인 View Model 추가
+- 각 Aggregte Attribute
+  . reservation : orderid, userid, bookid, status
+  . stock : bookid, qty
+  . customer : orderid, userid, bookid, status
 
 ### 완성본에 대한 기능적/비기능적 요구사항을 커버하는지 검증
 
