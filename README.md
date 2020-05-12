@@ -146,13 +146,13 @@
 ![image](https://user-images.githubusercontent.com/63623995/81631247-631fc400-9442-11ea-91d9-feca89fdb137.png)
 
 - 도서 재고 리스트인 View Model 추가
-- 고객 관리 서비스 중 예약 취소 시 알람 누락되어 커넥션 추가 필요
+- 고객 관리 서비스 중 예약 취소 시 알람 누락
 
 ### 완성된 모형
 
 ![image](https://user-images.githubusercontent.com/63623995/81637021-3e324d80-9450-11ea-92f6-a8a9b61f2950.png)
 
-
+- 고객이 예약 취소 시 고객 관리 서비스 통해 알람 발송되도록 비동기식 커넥션 추가
 - 각 Aggregte Attribute
   . reservation : orderid, userid, bookid, status
   . stock : bookid, qty
