@@ -144,13 +144,20 @@
 ![image](https://user-images.githubusercontent.com/63623995/81631247-631fc400-9442-11ea-91d9-feca89fdb137.png)
 
 - 도서 재고 리스트인 View Model 추가
-- 고객 관리 서비스 중 예약 취소 시 알람 누락
+- customermanagement 서비스 중 예약 취소 시 알람 누락
 
-### 완성된 모형
+### 2차 완성된 모형
 
 ![image](https://user-images.githubusercontent.com/63623995/81637021-3e324d80-9450-11ea-92f6-a8a9b61f2950.png)
 
 - 고객이 예약 취소 시 고객 관리 서비스 통해 알람 발송되도록 비동기식 커넥션 추가
+- customermanagement 영역 Event가 무의미 하여, aggregate/event 제거 Needs 발생
+
+### 완성된 모형
+
+![image](https://user-images.githubusercontent.com/63623995/81639169-2b227c00-9456-11ea-8e93-3a30d4344660.png)
+
+- customermanagement에서 이벤트 만 받아서 카톡 알람 처리하는 것으로 완결
 - 각 Aggregte Attribute
   - reservation : orderid, userid, bookid, status
   - stock : bookid, qty
