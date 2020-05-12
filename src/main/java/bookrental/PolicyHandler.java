@@ -16,9 +16,9 @@ public class PolicyHandler{
 
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverRevfailed_Statusupdate(@Payload Revfailed revfailed){
-        if(revfailed.isMe()){
-            System.out.println("##### Revfailed ##### : " + revfailed.toJson());
-        }
+            if (revfailed.isMe()) {
+                System.out.println("##### Revfailed ##### : " + revfailed.toJson());
+            }
     }
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverRevcanceled_Statusupdate(@Payload Revcanceled revcanceled){

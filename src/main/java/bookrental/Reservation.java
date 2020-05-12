@@ -51,27 +51,48 @@ public class Reservation {
 
     @PostUpdate
     public void onPostUpdate(){
-        Reserved reserved = new Reserved();
-        reserved.setOrderId(this.getId());
-        reserved.setUserid(this.getUserid());
-        reserved.setBookid(this.getBookid());
-        reserved.setStatus(this.getStatus());
-        ObjectMapper objectMapper = new ObjectMapper();
-        String json = null;
+        if("Canceled".equals(this.getStatus())){
+            Canceled canceled = new Canceled();
+            canceled.setBookid(this.getBookid());
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = null;
 
-        try {
-            json = objectMapper.writeValueAsString(reserved);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("JSON format exception", e);
+            try {
+                json = objectMapper.writeValueAsString(canceled);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("JSON format exception", e);
+            }
+
+            KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
+            MessageChannel outputChannel = processor.outboundTopic();
+
+            outputChannel.send(MessageBuilder
+                    .withPayload(json)
+                    .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                    .build());
+        }else{
+            Reserved reserved = new Reserved();
+            reserved.setOrderId(this.getId());
+            reserved.setUserid(this.getUserid());
+            reserved.setBookid(this.getBookid());
+            reserved.setStatus(this.getStatus());
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = null;
+
+            try {
+                json = objectMapper.writeValueAsString(reserved);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("JSON format exception", e);
+            }
+
+            KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
+            MessageChannel outputChannel = processor.outboundTopic();
+
+            outputChannel.send(MessageBuilder
+                    .withPayload(json)
+                    .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                    .build());
         }
-
-        Processor processor = Application.applicationContext.getBean(Processor.class);
-        MessageChannel outputChannel = processor.output();
-
-        outputChannel.send(MessageBuilder
-                .withPayload(json)
-                .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
-                .build());
     }
 
 
