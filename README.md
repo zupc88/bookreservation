@@ -154,9 +154,9 @@
 
 - 고객이 예약 취소 시 고객 관리 서비스 통해 알람 발송되도록 비동기식 커넥션 추가
 - 각 Aggregte Attribute
-  . reservation : orderid, userid, bookid, status
-  . stock : bookid, qty
-  . customer : orderid, userid, bookid, status
+  - bookreservation : orderid, userid, bookid, status
+  - stockmanagement : bookid, qty
+  - customermanagement : orderid, userid, bookid, status
 
 ### 완성본에 대한 기능적/비기능적 요구사항을 커버하는지 검증
 
