@@ -39,7 +39,7 @@ spring:
     stream:
       kafka:
         binder:
-          brokers: my-kafka2.kafka.svc.cluster.local:9092
+          brokers: my-kafka2.default.svc.cluster.local:9092
         streams:
           binder:
             configuration:
