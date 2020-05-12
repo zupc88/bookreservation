@@ -119,9 +119,8 @@
 
 
 ### 이벤트 도출
-![image](https://user-images.githubusercontent.com/63623995/81629770-e9d2a200-943e-11ea-8a95-02c1bae75b1b.png)
-
 원할한 토론, 이해를 위해 event-storming 초반은 한글로 작성 및 진행
+![image](https://user-images.githubusercontent.com/63623995/81629770-e9d2a200-943e-11ea-8a95-02c1bae75b1b.png)
 
 ### 액터, 커맨드 부착하여 읽기 좋게
 ![image](https://user-images.githubusercontent.com/63623995/81630226-fe636a00-943f-11ea-93d5-67f851180950.png)
@@ -140,6 +139,7 @@
         
 
 ### 폴리시 부착 및 컨텍스트 매핑은 MSAEZ 도구 사용하여 진행
+모든 언어를 영어로 변환하여, 유비쿼터스 랭귀지로 소스코드 작성 기반 마련
 
 ### 완성된 모형
 
