@@ -141,11 +141,18 @@
 ### 폴리시 부착 및 컨텍스트 매핑은 MSAEZ 도구 사용하여 진행
 모든 언어를 영어로 변환하여, 유비쿼터스 랭귀지로 소스코드 작성 기반 마련
 
-### 완성된 모형
+### 1차 완성된 모형
 
 ![image](https://user-images.githubusercontent.com/63623995/81631247-631fc400-9442-11ea-91d9-feca89fdb137.png)
 
 - 도서 재고 리스트인 View Model 추가
+- 고객 관리 서비스 중 예약 취소 시 알람 누락되어 커넥션 추가 필요
+
+### 완성된 모형
+
+![image](https://user-images.githubusercontent.com/63623995/81637021-3e324d80-9450-11ea-92f6-a8a9b61f2950.png)
+
+
 - 각 Aggregte Attribute
   . reservation : orderid, userid, bookid, status
   . stock : bookid, qty
