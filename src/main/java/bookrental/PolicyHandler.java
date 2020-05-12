@@ -18,6 +18,14 @@ public class PolicyHandler{
     public void wheneverRevfailed_Statusupdate(@Payload Revfailed revfailed){
             if (revfailed.isMe()) {
                 System.out.println("##### Revfailed ##### : " + revfailed.toJson());
+                reservationRepository.findBybookid(revfailed.getBookid())
+                        .ifPresent(
+                                reservation -> {
+                                    reservation.setStatus("Failed");
+                                    reservationRepository.save(reservation);
+                                }
+                        );
+                ;
             }
     }
     @StreamListener(KafkaProcessor.INPUT)
