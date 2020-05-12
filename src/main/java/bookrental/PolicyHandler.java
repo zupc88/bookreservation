@@ -24,7 +24,7 @@ public class PolicyHandler{
     public void wheneverRevcanceled_Statusupdate(@Payload Revcanceled revcanceled){
         if(revcanceled.isMe()){
             System.out.println("##### revcanceled ##### : " + revcanceled.toJson());
-            reservationRepository.findByBookId(revcanceled.getBookid())
+            reservationRepository.findBybookid(revcanceled.getBookid())
                     .ifPresent(
                             reservation -> {
                                 reservation.setStatus("Canceled");
@@ -39,7 +39,7 @@ public class PolicyHandler{
     public void wheneverRevsuccessed_Statusupdate(@Payload Revsuccessed revsuccessed){
         if(revsuccessed.isMe()){
             System.out.println("##### Successed ##### : " + revsuccessed.toJson());
-            reservationRepository.findByBookId(revsuccessed.getBookid())
+            reservationRepository.findBybookid(revsuccessed.getBookid())
                     .ifPresent(
                             reservation -> {
                                 reservation.setStatus("Successed");

@@ -2,6 +2,7 @@ package bookrental;
 
 import javax.persistence.*;
 
+import bookrental.config.kafka.KafkaProcessor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.BeanUtils;
@@ -39,8 +40,8 @@ public class Reservation {
             throw new RuntimeException("JSON format exception", e);
         }
 
-        Processor processor = Application.applicationContext.getBean(Processor.class);
-        MessageChannel outputChannel = processor.output();
+        KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
+        MessageChannel outputChannel = processor.outboundTopic();
 
         outputChannel.send(MessageBuilder
                 .withPayload(json)

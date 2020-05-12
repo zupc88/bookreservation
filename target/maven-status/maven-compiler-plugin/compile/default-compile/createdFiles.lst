@@ -1,6 +1,7 @@
 bookrental\Booklist.class
 bookrental\Canceled.class
 bookrental\BooklistViewHandler.class
+bookrental\Revsuccessed.class
 bookrental\AbstractEvent$1.class
 bookrental\ReservationRepository.class
 bookrental\ReservationController.class
