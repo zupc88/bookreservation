@@ -689,7 +689,7 @@ Azure Monitor를 통해 CPU, Memory, POD등이 임계치를 초과 할 경우 SM
 ![image](https://user-images.githubusercontent.com/63623995/81772858-e5cb8080-9521-11ea-8b46-59770e0ed5c0.png)
 
 
-##Alerting
+## Alerting
 
 ■ 목표: 
 
@@ -702,7 +702,7 @@ Azure Monitor를 통해 CPU, Memory, POD등이 임계치를 초과 할 경우 SM
 ![image](https://user-images.githubusercontent.com/63623995/81772923-0e537a80-9522-11ea-9074-a2b8d713caa1.png)
 
 
-##Persistent Volume
+## Persistent Volume
 
 ■ 목표: 
 
