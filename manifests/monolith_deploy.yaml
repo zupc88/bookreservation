@@ -14,3 +14,40 @@ spec:
           image: ccteam4acr.azurecr.io/reservation
           ports:
             - containerPort: 8081
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
+            livenessProbe:
+              httpGet:
+                path: /reservations
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 5
+              periodSeconds: 30
+              timeoutSeconds: 5
+            readinessProbe:
+              httpGet:
+                path: /reservations
+                port: 8080
+                scheme: HTTP
+              initialDelaySeconds: 5
+              periodSeconds: 15
+              timeoutSeconds: 5
+            env:
+              - name: EMBED_TOMCAT_JAVA_OPTS
+                valueFrom:
+                  configMapKeyRef:
+                    name: spring-dev
+                    key: JAVA_OPTS
+              - name: DB_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: db-dev
+                    key: DB_USER
+              - name: DB_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: db-dev
+                    key: DB_PASS
