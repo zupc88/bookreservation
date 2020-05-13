@@ -400,15 +400,18 @@ public interface StockRepository extends CrudRepository<Stock, Long>{
 
 // 예약 서비스에서 고객의 예약 상태가 '성공'임을 확인
 3. http GET localhost:8081/reservations/*
+```
 ![image](https://user-images.githubusercontent.com/63623995/81771217-5de37780-951d-11ea-9918-0d6b6dc30531.png)
-
+```
 // 재고 서비스에서 고객이 예약한 책의 재고 감소를 확인
 4. http GET localhost:8082/stocks/*
+```
 ![image](https://user-images.githubusercontent.com/63623995/81771292-8c615280-951d-11ea-8d2a-587ece40b771.png)
-
+```
 // 고객 서비스 콘솔을 통해 고객의 예약이 정상적으로 완료 되었는지 확인
+```
 ![image](https://user-images.githubusercontent.com/63623995/81771166-3be9f500-951d-11ea-87bb-43f9f39b26d4.png)
-
+```
 
 실패 케이스
 // 재고 서비스 입고 (단, 테스트를 위한 수량은 '0')
@@ -429,23 +432,28 @@ public interface StockRepository extends CrudRepository<Stock, Long>{
 
 // 재고 서비스에서 고객이 예약한 책의 재고 감소를 확인
 3. http GET localhost:8082/stocks/*
+```
 ![image](https://user-images.githubusercontent.com/63623995/81771292-8c615280-951d-11ea-8d2a-587ece40b771.png)
-
+```
 // 예약 서비스에서 예약한 책을 취소 요청함
 4. http PATCH localhost:8081/reservations/* status="Canceled"
+```
 ![image](https://user-images.githubusercontent.com/63623995/81771410-d5b1a200-951d-11ea-85d5-c6a81bcba0fd.png)
-
+```
 // 예약 서비스에서 고객의 예약 상태가 '취소'임을 확인
 5. http GET localhost:8081/reservations/*
+```
 ![image](https://user-images.githubusercontent.com/63623995/81771432-ec57f900-951d-11ea-8940-38e24c625ee6.png)
-
+```
 // 재고 서비스에서 고객이 취소 요청한 책의 수량이 증가하였는지 확인한다.
 6. http GET localhost:8082/stocks/*
-![image](https://user-images.githubusercontent.com/63623995/81772095-db0fec00-951f-11ea-8c75-717ebcefed41.png)
-
-// 고객 서비스 콘솔을 통해 고객의 예약이 정상적으로 취소 되었는지 확인
-![image](https://user-images.githubusercontent.com/63623995/81772123-faa71480-951f-11ea-9d81-03253d199c3d.png)
 ```
+![image](https://user-images.githubusercontent.com/63623995/81772095-db0fec00-951f-11ea-8c75-717ebcefed41.png)
+```
+// 고객 서비스 콘솔을 통해 고객의 예약이 정상적으로 취소 되었는지 확인
+```
+![image](https://user-images.githubusercontent.com/63623995/81772123-faa71480-951f-11ea-9d81-03253d199c3d.png)
+
 
 
 ## 퍼시스턴스
@@ -583,8 +591,9 @@ public class PolicyHandler{
 
 # 예약 서비스 : 고객의 예약 상태가 '성공'임을 확인
 3. http GET localhost:8081/reservations/*
+```
 ![image](https://user-images.githubusercontent.com/63623995/81771217-5de37780-951d-11ea-9918-0d6b6dc30531.png)
-
+```
 # 예약 완료 알람이 오지 않음
 
 # 고객관리 서비스 기동
@@ -593,8 +602,9 @@ mvn spring-boot:run
 
 # 고객관리 서비스 : 알람 확인
 5. "##### 예약 완료 되었습니다  #####"
-![image](https://user-images.githubusercontent.com/63623995/81771166-3be9f500-951d-11ea-87bb-43f9f39b26d4.png)
 ```
+![image](https://user-images.githubusercontent.com/63623995/81771166-3be9f500-951d-11ea-87bb-43f9f39b26d4.png)
+
 
 
 # 운영
