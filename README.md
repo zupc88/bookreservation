@@ -621,15 +621,7 @@ CI에 빌드하면하면, Webhook에 의해 CD까지 수행됨.
 (로직에는 sleep 30적용을 통해 Java Thread 수행 시간이 오래 걸림)
 
 가. 부하 발생 전
-root@SKCC18D00125:~# kubectl get hpa -n bookstore
-NAME                REFERENCE                  TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-reservation-hpa     Deployment/reservation     0%/10%   1         4         1          1m14s
-나. 부하 발생
-http POST bookstore.skcc.co.kr/reservations userid="user" bookid="1" status="selfHealingTest"
-다. 부하 발생 후
-root@SKCC18D00125:~# kubectl get hpa -n bookstore
-NAME                REFERENCE                  TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-reservation-hpa     Deployment/reservation     58%/10%   1         4         4          6m55s
+![image](https://user-images.githubusercontent.com/63623995/81773542-75256380-9523-11ea-8701-f64d2d1be91b.png)
 
 ■ 결과: 
 Stress 테스트 통해 시스템 Capacity가 초과되는 Request 요청 시 HPA에 의해 POD자동 증가
