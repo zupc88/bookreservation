@@ -234,24 +234,119 @@ python policy-handler.py
 
 ## DDD 의 적용
 
-- 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다: (예시는 pay 마이크로 서비스). 이때 가능한 현업에서 사용하는 언어 (유비쿼터스 랭귀지)를 그대로 사용하려고 노력했다.
+- 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다: (예시는 Customer 마이크로 서비스). 
 
 ```
-package fooddelivery;
+package bookrental;
 
 import javax.persistence.*;
-import org.springframework.beans.BeanUtils;
-import java.util.List;
+
+import bookrental.config.kafka.KafkaProcessor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.support.MessageBuilder;
+import org.springframework.util.MimeTypeUtils;
 
 @Entity
-@Table(name="결제이력_table")
-public class 결제이력 {
+@Table(name="Stock_table")
+public class Stock {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-    private String orderId;
-    private Double 금액;
+    private String bookid;
+    private Long qty;
+    private String status;
+
+    @PostPersist
+    public void onPostPersist(){
+        Incomed incomed = new Incomed();
+        incomed.setId(this.getId());
+        incomed.setBookid(this.getBookid());
+        incomed.setQty(this.getQty());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = null;
+
+        try {
+            json = objectMapper.writeValueAsString(incomed);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON format exception", e);
+        }
+
+        KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
+        MessageChannel outputChannel = processor.outboundTopic();
+        outputChannel.send(MessageBuilder
+                .withPayload(json)
+                .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                .build());
+    }
+
+    @PostUpdate
+    public void onPostUpdate(){
+        String status = this.getStatus();
+        
+        if(status.equals("revSucceeded")){
+            Revsuccessed revsuccessed = new Revsuccessed();
+            revsuccessed.setId(this.getId());
+            revsuccessed.setBookid(this.getBookid());
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = null;
+
+            try {
+                json = objectMapper.writeValueAsString(revsuccessed);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("JSON format exception", e);
+            }
+
+            KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
+            MessageChannel outputChannel = processor.outboundTopic();
+            outputChannel.send(MessageBuilder
+                    .withPayload(json)
+                    .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                    .build());
+
+        } else if(status.equals("revFailed")){
+            Revfailed revfailed = new Revfailed();
+            revfailed.setId(this.getId());
+            revfailed.setBookid(this.getBookid());
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = null;
+
+            try {
+                json = objectMapper.writeValueAsString(revfailed);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("JSON format exception", e);
+            }
+
+            KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
+            MessageChannel outputChannel = processor.outboundTopic();
+            outputChannel.send(MessageBuilder
+                    .withPayload(json)
+                    .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                    .build());
+        } else if(status.equals("revCanceled")) {
+            Revcanceled revcanceled = new Revcanceled();
+            revcanceled.setId(this.getId());
+            revcanceled.setBookid(this.getBookid());
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = null;
+
+            try {
+                json = objectMapper.writeValueAsString(revcanceled);
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException("JSON format exception", e);
+            }
+            
+            KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
+            MessageChannel outputChannel = processor.outboundTopic();
+            outputChannel.send(MessageBuilder
+                    .withPayload(json)
+                    .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                    .build());
+        }
+    }
 
     public Long getId() {
         return id;
@@ -260,37 +355,47 @@ public class 결제이력 {
     public void setId(Long id) {
         this.id = id;
     }
-    public String getOrderId() {
-        return orderId;
+    public String getBookid() {
+        return bookid;
     }
 
-    public void setOrderId(String orderId) {
-        this.orderId = orderId;
+    public void setBookid(String bookid) {
+        this.bookid = bookid;
     }
-    public Double get금액() {
-        return 금액;
-    }
-
-    public void set금액(Double 금액) {
-        this.금액 = 금액;
+    public Long getQty() {
+        return qty;
     }
 
+    public void setQty(Long qty) {
+        this.qty = qty;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
 }
 
 ```
 - Entity Pattern 과 Repository Pattern 을 적용하여 JPA 를 통하여 다양한 데이터소스 유형 (RDB or NoSQL) 에 대한 별도의 처리가 없도록 데이터 접근 어댑터를 자동 생성하기 위하여 Spring Data REST 의 RestRepository 를 적용하였다
 ```
-package fooddelivery;
+package bookrental;
 
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.CrudRepository;
+import java.util.Optional;
 
-public interface 결제이력Repository extends PagingAndSortingRepository<결제이력, Long>{
+public interface StockRepository extends CrudRepository<Stock, Long>{
+    Optional<Stock> findByBookid(String BookId);    # bookid로 찾기 위해 선언
 }
 ```
 - 적용 후 REST API 의 테스트
 ```
-# app 서비스의 주문처리
-http localhost:8081/orders item="통닭"
+### 수정 요망 ###
+# app 서비스의 예약처리
+http localhost:8081/reservations item="통닭"
 
 # store 서비스의 배달처리
 http localhost:8083/주문처리s orderId=1
@@ -332,21 +437,38 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
 
 도서예약이 이루어진 후에 재고관리시스템으로 이를 알려주는 행위는 동기식이 아니라 비 동기식으로 처리하여 재고관리시스템의 처리를 위하여 도서예약이 블로킹 되지 않도록 처리한다.
  
-- 이를 위하여 도서예약 기록을 남긴 후에 곧바로 예약 요청이 되었다는 도메인 이벤트를 카프카로 송출한다(Publish)
+- 이를 위하여 도서예약 기록을 남긴 후에 곧바로 예약 요청이 되었다는 도메인 이벤트를 카프카로 송출한다
  
 ```
-package fooddelivery;
+package bookrental;
 
 @Entity
-@Table(name="결제이력_table")
-public class 결제이력 {
+@Table(name="Reservation_table")
+public class Reservation {
 
  ...
-    @PrePersist
-    public void onPrePersist(){
-        결제승인됨 결제승인됨 = new 결제승인됨();
-        BeanUtils.copyProperties(this, 결제승인됨);
-        결제승인됨.publish();
+    @PostPersist
+    public void onPostPersist(){
+        Requested requested = new Requested();
+        requested.setOrderId(this.getId());
+        requested.setUserid(this.getUserid());
+        requested.setBookid(this.getBookid());
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = null;
+
+        try {
+            json = objectMapper.writeValueAsString(requested);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("JSON format exception", e);
+        }
+
+        KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
+        MessageChannel outputChannel = processor.outboundTopic();
+
+        outputChannel.send(MessageBuilder
+                .withPayload(json)
+                .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                .build());
     }
 
 }
@@ -354,7 +476,7 @@ public class 결제이력 {
 - 재고관리 서비스에서는 도서예약 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다:
 
 ```
-package fooddelivery;
+package bookrental;
 
 ...
 
@@ -362,12 +484,27 @@ package fooddelivery;
 public class PolicyHandler{
 
     @StreamListener(KafkaProcessor.INPUT)
-    public void whenever결제승인됨_주문정보받음(@Payload 결제승인됨 결제승인됨){
+    public void wheneverRequested_Checkstock(@Payload Requested requested){
 
-        if(결제승인됨.isMe()){
-            System.out.println("##### listener 주문정보받음 : " + 결제승인됨.toJson());
-            // 주문 정보를 받았으니, 요리를 슬슬 시작해야지..
-            
+        if(requested.isMe()) {
+            stockRepository.findByBookid(requested.getBookid())
+                    .ifPresent(
+                            stock -> {
+                                long qty = stock.getQty();
+
+                                if (qty >= 1) {   # 재고량이 1개 이상 있으면
+                                    stock.setQty(qty - 1);  # 재고 차감 후 
+                                    stock.setStatus("revSucceeded");  # 예약완료 status set
+                                    stockRepository.save(stock);
+                                    System.out.println("set Stock -1");
+                                } else {
+                                    stock.setStatus("revFailed");   # 예약실패 status set
+                                    stockRepository.save(stock);
+                                    System.out.println("stock-out");
+                                }
+                            }
+                    )
+            ;
         }
     }
 
@@ -377,39 +514,39 @@ public class PolicyHandler{
 이후, 재고 차감에 성공하고 예약이 완료되면 카톡 등으로 고객에게 카톡 등으로 알람을 보낸다. 
   
 ```
-  @Autowired 주문관리Repository 주문관리Repository;
-  
-  @StreamListener(KafkaProcessor.INPUT)
-  public void whenever결제승인됨_주문정보받음(@Payload 결제승인됨 결제승인됨){
+    @Service
+    public class PolicyHandler{
 
-      if(결제승인됨.isMe()){
-          카톡전송(" 주문이 왔어요! : " + 결제승인됨.toString(), 주문.getStoreId());
+        @StreamListener(KafkaProcessor.INPUT)
+        public void wheneverReserved_Orderresultalarm(@Payload Reserved reserved){
 
-          주문관리 주문 = new 주문관리();
-          주문.setId(결제승인됨.getOrderId());
-          주문관리Repository.save(주문);
-      }
-  }
+            if(reserved.isMe()){
+                System.out.println("##### 예약 완료 되었습니다  #####" );//+ reserved.toJson());
+            }
+
+        }
+    }
 
 ```
 
 도서예약 시스템은 재고관리 시스템와 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 재고관리 시스템이 유지보수로 인해 잠시 내려간 상태라도 예약을 받는데 문제가 없다:
 ```
-# 상점 서비스 (store) 를 잠시 내려놓음 (ctrl+c)
+# 재고 서비스 (stock) 를 잠시 내려놓음 (ctrl+c)
 
-#주문처리
+### 수정 요망 ###
+#예약처리
 http localhost:8081/orders item=통닭 storeId=1   #Success
 http localhost:8081/orders item=피자 storeId=2   #Success
 
-#주문상태 확인
-http localhost:8080/orders     # 주문상태 안바뀜 확인
+#예약상태 확인
+http localhost:8080/orders     # 예약상태 안바뀜 확인
 
-#상점 서비스 기동
+#재고 서비스 기동
 cd 상점
 mvn spring-boot:run
 
-#주문상태 확인
-http localhost:8080/orders     # 모든 주문의 상태가 "배송됨"으로 확인
+#예약상태 확인
+http localhost:8080/orders     # 모든 예약의 상태가 "success"인 것을 확인
 ```
 
 
