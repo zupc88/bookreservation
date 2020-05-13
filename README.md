@@ -648,37 +648,11 @@ while [ true ]; do http POST bookstore.skcc.co.kr/reservations userid="user" boo
 
 ■ 결과: 
 POD에 Hang 발생 시 liveness Probe 설정에 의해 자동으로 POD재부팅 됨.
-Events:
-  Type     Reason     Age                 From                                        Message
-  ----     ------     ----                 ----                                        -------
-  Normal   Scheduled  24m                  default-scheduler                           Successfully assigned bookstore/reservation-6dcd658f8d-7lp8x to aks-agentpool-21044422-vmss000000
-  Normal   Pulling    24m                  kubelet, aks-agentpool-21044422-vmss000000  Pulling image "ccteam4acr.azurecr.io/reservation:72"
-  Normal   Pulled     24m                  kubelet, aks-agentpool-21044422-vmss000000  Successfully pulled image "ccteam4acr.azurecr.io/reservation:72"
-  Normal   Created    24m                  kubelet, aks-agentpool-21044422-vmss000000  Created container reservation
-  Normal   Started    24m                  kubelet, aks-agentpool-21044422-vmss000000  Started container reservation
-  Warning  Unhealthy  24m                  kubelet, aks-agentpool-21044422-vmss000000  Liveness probe failed: Get http://10.244.0.67:8080/reservations: dial tcp 10.244.0.67:8080: connect: connection refused
-  Warning  Unhealthy  23m (x4 over 24m)    kubelet, aks-agentpool-21044422-vmss000000  Readiness probe failed: Get http://10.244.0.67:8080/reservations: dial tcp 10.244.0.67:8080: connect: connection refused
-  Warning  Unhealthy  108s (x12 over 14m)  kubelet, aks-agentpool-21044422-vmss000000  Readiness probe failed: Get http://10.244.0.67:8080/reservations: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
-  Warning  Unhealthy  100s (x6 over 14m)   kubelet, aks-agentpool-21044422-vmss000000  Liveness probe failed: Get http://10.244.0.67:8080/reservations: net/http: request canceled (Client.Timeout exceeded while awaiting headers)
-  Normal   Killing    100s                 kubelet, aks-agentpool-21044422-vmss000000  Container reservation failed liveness probe, will be restarted
+
+![image](https://user-images.githubusercontent.com/63623995/81773806-23c9a400-9524-11ea-9606-417f9805df5d.png)
 
 ■ 참고 자료: Probe 설정 내역
-          livenessProbe:
-            httpGet:
-              path: /reservations
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 5
-            periodSeconds: 15
-            timeoutSeconds: 5
-          readinessProbe:
-            httpGet:
-              path: /reservations
-              port: 8080
-              scheme: HTTP
-            initialDelaySeconds: 5
-            timeoutSeconds: 1
-
+![image](https://user-images.githubusercontent.com/63623995/81773872-4360cc80-9524-11ea-887b-d29a7e5e94a0.png)
 
 ## ConfigMap / Secret 적용
 
