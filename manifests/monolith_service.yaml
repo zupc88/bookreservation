@@ -13,11 +13,11 @@ spec:
   template:
     metadata:
       labels:
-        app: nginx
+        app: reservation
     spec:
       containers:
-        - name: nginx
-          image: nginx:latest
+        - name: reservation
+          image: ccteam4acr.azurecr.io/reservation
           ports:
             - containerPort: 80
           resources:
