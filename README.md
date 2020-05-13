@@ -219,22 +219,20 @@
 분석/설계 단계에서 도출된 헥사고날 아키텍처에 따라, 각 BC별로 대변되는 마이크로 서비스들을 스프링부트로 구현하였다. 구현한 각 서비스를 로컬에서 실행하는 방법은 아래와 같다 (각자의 포트넘버는 8081 ~ 808n 이다)
 
 ```
-cd app
+cd bookreservation
 mvn spring-boot:run
 
-cd pay
+cd stockmanagement
 mvn spring-boot:run 
 
-cd store
+cd customermanagement
 mvn spring-boot:run  
 
-cd customer
-python policy-handler.py 
 ```
 
 ## DDD 의 적용
 
-- 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다: (예시는 Customer 마이크로 서비스). 
+- 각 서비스내에 도출된 핵심 Aggregate Root 객체를 Entity 로 선언하였다: (예시는 stock 마이크로 서비스). 
 
 ```
 package bookrental;
@@ -565,24 +563,28 @@ public class PolicyHandler{
 
 ```
 
-도서예약 시스템은 재고관리 시스템와 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 재고관리 시스템이 유지보수로 인해 잠시 내려간 상태라도 예약을 받는데 문제가 없다:
+도서예약 시스템은 고객관리(알람) 시스템와 완전히 분리되어있으며, 이벤트 수신에 따라 처리되기 때문에, 고객관리 시스템이 유지보수로 인해 잠시 내려간 상태라도 예약을 받는데 문제가 없다:
 ```
-# 재고 서비스 (stock) 를 잠시 내려놓음 (ctrl+c)
+# 고객관리 서비스 (customer) 를 잠시 내려놓음 (ctrl+c)
 
-### 수정 요망 ###
-#예약처리
-http localhost:8081/orders item=통닭 storeId=1   #Success
-http localhost:8081/orders item=피자 storeId=2   #Success
+# 재고 서비스 : 입고
+1. http POST localhost:8082/stocks bookid="1" qty=5
 
-#예약상태 확인
-http localhost:8080/orders     # 예약상태 안바뀜 확인
+# 주문 서비스 : 입고된 책 주문
+2. http POST localhost:8081/reservations userid="user" bookid="1"   #Success
 
-#재고 서비스 기동
-cd 상점
+# 주문 서비스 : 고객의 주문 상태가 '성공'임을 확인
+3. http GET localhost:8081/reservations/*
+
+# 주문 완료 알람이 오지 않음
+
+# 고객관리 서비스 기동
+4. cd customermanagement
 mvn spring-boot:run
 
-#예약상태 확인
-http localhost:8080/orders     # 모든 예약의 상태가 "success"인 것을 확인
+# 고객관리 서비스 : 알람 확인
+5. "##### 예약 완료 되었습니다  #####"
+
 ```
 
 
