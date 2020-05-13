@@ -598,27 +598,26 @@ mvn spring-boot:run
 #### CI
 http://devops.azure.com 접속
 
-PIPELINES
+1. PIPELINES
 
-New Pipiline
+2. New Pipiline
 
-Classic Editor (아래)
+3. Classic Editor (아래)
 
-GitHub -> 레퍼지터리 선택 -> 선택
+4. GitHub -> 레퍼지터리 선택 -> 선택
 
-Empty job 선택
+5. Empty job 선택
 
-Name 지정
+6. Name 지정
 
-Agent Specificatin : ubuntu-18.04
+7. Agent Specificatin : ubuntu-18.04
 
-Agejtn job 1에서 "+" 버튼 누르고, maven, copy files, publish  "build" artifact , docker 추가
+8. Agejtn job 1에서 "+" 버튼 누르고, maven, copy files, publish  "build" artifact , docker 추가
 
-
-maven 
+9. maven 
 설정 변경 없음
 
-copy file 설정 변경
+10. copy file 설정 변경
 가. 소스폴더: $(system.defaultworkingdirectory)
 나. 컨텐츠:
 **/*.jar
@@ -627,31 +626,28 @@ azure/*
 manifests/*
 다. 타겟폴더: $(build.artifactstagingdirectory) 
 
-docker 설정 변경
+11. docker 설정 변경
 Container registry: acr
 container repository: monolith2
 
+12. SAVE
 
-SAVE
-
-RUN (RUN해야 CD에서 manifests 연동 가능)
+13. RUN (RUN해야 CD에서 manifests 연동 가능)
 
 #### CD
-ci 환경 구성
+1. Releases 선택
 
-Releases 선택
+2. Empty job 선택
 
-Empty job 선택
+3. 왼쪽 Artifact에  + 누르고 소스 선택 
 
-왼쪽 Artifact에  + 누르고 소스 선택 
-
-트리거 -> 맨위에 Enabled 선택
+4. 트리거 -> 맨위에 Enabled 선택
  
-Task -> Agent job -> Agent Specification -. Ubuntu 18
+5. Task -> Agent job -> Agent Specification -. Ubuntu 18
 
-Agent Job 에서 + 누르고  Deploy to kubernetes 추가
+6. Agent Job 에서 + 누르고  Deploy to kubernetes 추가
 
-deploy 선택  -> 
+7. deploy 선택  -> 
 •Kubernetes service connection 에  aks 선택
 •Manifests 에 폴더를 선택 하고 아래처럼 * (아스테리스크) 표시
 •/../manefest/*
