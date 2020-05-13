@@ -621,37 +621,17 @@ CI에 빌드하면하면, Webhook에 의해 CD까지 수행됨.
 (로직에는 sleep 30적용을 통해 Java Thread 수행 시간이 오래 걸림)
 
 가. 부하 발생 전
+
 ![image](https://user-images.githubusercontent.com/63623995/81773542-75256380-9523-11ea-8701-f64d2d1be91b.png)
 
 ■ 결과: 
 Stress 테스트 통해 시스템 Capacity가 초과되는 Request 요청 시 HPA에 의해 POD자동 증가
 
-Transactions:                   7732 hits
-Availability:                 100.00 %
-Elapsed time:                  35.80 secs
-Data transferred:              14.58 MB
-Response time:                  0.05 secs
-Transaction rate:             215.98 trans/sec
-Throughput:                     0.41 MB/sec
-Concurrency:                    9.98
-Successful transactions:        7732
-Failed transactions:               0
-Longest transaction:            3.06
-Shortest transaction:           0.01
+![image](https://user-images.githubusercontent.com/63623995/81773629-b453b480-9523-11ea-8b47-3c52d3ed1b17.png)
 
 ■ 참고 자료: HPA설정 내역
-apiVersion: autoscaling/v1
-kind: HorizontalPodAutoscaler
-metadata:
-  name: nginx-hpa
-spec:
-  maxReplicas: 4 # define max replica count
-  minReplicas: 1  # define min replica count
-  scaleTargetRef:
-    apiVersion: apps/v1
-    kind: Deployment
-    name: nginx
-  targetCPUUtilizationPercentage: 10 # target CPU utilization 
+
+![image](https://user-images.githubusercontent.com/63623995/81773688-d77e6400-9523-11ea-8ee0-3e7ff0646373.png)
 
 
 
