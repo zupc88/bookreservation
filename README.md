@@ -644,6 +644,7 @@ POD에 예상치 못한 장애가 발생 할 경우, POD가 자동으로 재부�
 과도하게 오래 실행되는 로직을 다수 수행할 경우, WAS의 Java Thread 부족으로 인해 Hang 발생
 
 ■ 테스트 명령어
+
 while [ true ]; do http POST bookstore.skcc.co.kr/reservations userid="user" bookid="1" status="selfHealingTest" & done
 
 ■ 결과: 
@@ -652,7 +653,9 @@ POD에 Hang 발생 시 liveness Probe 설정에 의해 자동으로 POD재부팅
 ![image](https://user-images.githubusercontent.com/63623995/81773806-23c9a400-9524-11ea-9606-417f9805df5d.png)
 
 ■ 참고 자료: Probe 설정 내역
+
 ![image](https://user-images.githubusercontent.com/63623995/81773872-4360cc80-9524-11ea-887b-d29a7e5e94a0.png)
+
 
 ## ConfigMap / Secret 적용
 
@@ -691,11 +694,13 @@ data:
 
 ## Monitoring
 
-■ 목표: 
+■ 목표:
+
 쿠버네티스 서비스 모니터링 구성
 POD의 상태가 비정상이거나, Node의 CPU/Memory 사용량이 비정상적으로 과도할 경우, 운영자에게 SMS으로 Alert함.
 
 ■ 구성 내역: 
+
 Azure Monitor를 통해 CPU, Memory, POD등이 임계치를 초과 할 경우 SMS 발송 되도록 구성 함.
 ![image](https://user-images.githubusercontent.com/63623995/81772858-e5cb8080-9521-11ea-8b46-59770e0ed5c0.png)
 
@@ -703,10 +708,12 @@ Azure Monitor를 통해 CPU, Memory, POD등이 임계치를 초과 할 경우 SM
 ##Alerting
 
 ■ 목표: 
+
 쿠버네티스 서비스 모니터링 및 Alerting 구성
 POD의 상태가 비정상이거나, Node의 CPU/Memory 사용량이 비정상적으로 과도할 경우, 운영자에게 SMS으로 Alert함.
 
 ■ 구성 내역: 
+
 Azure Monitor를 통해 CPU, Memory, POD등이 임계치를 초과 할 경우 SMS 발송 되도록 구성 함.
 ![image](https://user-images.githubusercontent.com/63623995/81772923-0e537a80-9522-11ea-9074-a2b8d713caa1.png)
 
@@ -714,14 +721,17 @@ Azure Monitor를 통해 CPU, Memory, POD등이 임계치를 초과 할 경우 SM
 ##Persistent Volume
 
 ■ 목표: 
+
 Persistent Volume 마운트를 통해 영구 데이터 저장
 해당 스토리지는 첨부 파일들을 저장하는데 사용 가능하며, Dynamic으로 유동성있게 구성함.
 
 ■ 구성 결과: 
+
 root@mypod-azurefiles:/# df -h | grep azure
 //faee688dbf4284f62a1a567.file.core.windows.net/kubernetes-dynamic-pvc-d402c327-d428-4eb8-9f0d-072314cc6555  5.0G     0  5.0G   0% /mnt/azure
 
 ■ 설정 내역: 
+
 [Storage Class]
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
