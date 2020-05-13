@@ -592,9 +592,76 @@ mvn spring-boot:run
 
 ## CI/CD 설정
 
-
 각 구현체들은 각자의 Git source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 Azure를 사용하였으며, pipeline build script 는 각 서비스 프로젝트 폴더 이하에 azure-pipelines.yml 에 포함되었다.
 
+### 설정 가이드
+#### CI
+http://devops.azure.com 접속
+
+PIPELINES
+
+New Pipiline
+
+Classic Editor (아래)
+
+GitHub -> 레퍼지터리 선택 -> 선택
+
+Empty job 선택
+
+Name 지정
+
+Agent Specificatin : ubuntu-18.04
+
+Agejtn job 1에서 "+" 버튼 누르고, maven, copy files, publish  "build" artifact , docker 추가
+
+
+maven 
+설정 변경 없음
+
+copy file 설정 변경
+가. 소스폴더: $(system.defaultworkingdirectory)
+나. 컨텐츠:
+**/*.jar
+Dockerfile
+azure/*
+manifests/*
+다. 타겟폴더: $(build.artifactstagingdirectory) 
+
+docker 설정 변경
+Container registry: acr
+container repository: monolith2
+
+
+SAVE
+
+RUN (RUN해야 CD에서 manifests 연동 가능)
+
+#### CD
+ci 환경 구성
+
+Releases 선택
+
+Empty job 선택
+
+왼쪽 Artifact에  + 누르고 소스 선택 
+
+트리거 -> 맨위에 Enabled 선택
+ 
+Task -> Agent job -> Agent Specification -. Ubuntu 18
+
+Agent Job 에서 + 누르고  Deploy to kubernetes 추가
+
+deploy 선택  -> 
+•Kubernetes service connection 에  aks 선택
+•Manifests 에 폴더를 선택 하고 아래처럼 * (아스테리스크) 표시
+•/../manefest/*
+•Containers 는 변경할 이미지 명    
+ccteam4acr.azurecr.io/이미지명:$(Build.BuildId)    
+
+CI에 빌드하면하면, Webhook에 의해 CD까지 수행됨.
+(Kubernetes에서 pod상태 확인 필요)
+
+### 설정 과정
 - Pipeline 생성 (Reservation, Stockmanagement, Customermanagement)
 ![pipe](https://user-images.githubusercontent.com/63623995/81764531-c0804780-950c-11ea-9553-402bba09c0ca.png)
 
