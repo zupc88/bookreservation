@@ -650,12 +650,11 @@ while [ true ]; do http POST bookstore.skcc.co.kr/reservations userid="user" boo
 ■ 결과: 
 POD에 Hang 발생 시 liveness Probe 설정에 의해 자동으로 POD재부팅 됨.
 
-![image](https://user-images.githubusercontent.com/63623995/81773806-23c9a400-9524-11ea-9606-417f9805df5d.png)
+![image](https://user-images.githubusercontent.com/63623995/81774269-211b7e80-9525-11ea-8c2a-cf5f4cf9df96.png)
 
 ■ 참고 자료: Probe 설정 내역
 
-![image](https://user-images.githubusercontent.com/63623995/81773872-4360cc80-9524-11ea-887b-d29a7e5e94a0.png)
-
+![image](https://user-images.githubusercontent.com/63623995/81774336-44462e00-9525-11ea-907b-c4a3132db38c.png)
 
 ## ConfigMap / Secret 적용
 
