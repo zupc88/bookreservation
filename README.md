@@ -673,23 +673,8 @@ DB_USER=myuser
 DB_PASS=#skcc123
 
 ■ 참고 자료: ConfigMap/Secret 설정 내역
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: spring-dev
-  namespace: bookstore
-data:
-  DB_URL: skcc-bookstore-dev
-  JAVA_OPTS: -client
----  
-apiVersion: v1
-kind: Secret
-metadata:
-  name: db-dev
-  namespace: bookstore
-data:
-  DB_USER: bXl1c2VyCg==
-  DB_PASS: I3NrY2MxMjMK
+
+![image](https://user-images.githubusercontent.com/63623995/81774137-dac61f80-9524-11ea-8735-d26a99fe9aa2.png)
 		
 
 ## Monitoring
