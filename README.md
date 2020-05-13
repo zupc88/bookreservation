@@ -393,15 +393,51 @@ public interface StockRepository extends CrudRepository<Stock, Long>{
 ```
 - 적용 후 REST API 의 테스트
 ```
-### 수정 요망 ###
-# app 서비스의 예약처리
-http localhost:8081/reservations item="통닭"
+성공 케이스
+// 재고 서비스 입고
+1. http POST localhost:8082/stocks bookid="1" qty=5
 
-# store 서비스의 배달처리
-http localhost:8083/주문처리s orderId=1
+// 주문 서비스에서 입고된 책 주문
+2. http POST localhost:8081/reservations userid="user" bookid="1"
 
-# 주문 상태 확인
-http localhost:8081/orders/1
+// 주문 서비스에서 고객의 주문 상태가 '성공'임을 확인
+3. http GET localhost:8081/reservations/*
+
+// 재고 서비스에서 고객이 주문한 책의 재고 감소를 확인
+4. http GET localhost:8082/stocks/*
+
+// 고객 서비스 콘솔을 통해 고객의 주문이 정상적으로 완료 되었는지 확인
+
+실패 케이스
+// 재고 서비스 입고 (단, 테스트를 위한 수량은 '0')
+1. http POST localhost:8082/stocks bookid="2" qty=0
+
+// 주문 서비스에서 입고된 책 주문
+2. http POST localhost:8081/reservations userid="user" bookid="2"
+
+// 주문 서비스에서 고객의 주문 상태가 '실패'임을 확인
+3. http GET localhost:8081/reservations/*
+
+취소 케이스
+// 재고 서비스 입고
+1. http POST localhost:8082/stocks bookid="3" qty=5
+
+// 주문 서비스에서 입고된 책 주문
+2. http POST localhost:8081/reservations userid="user" bookid="3"
+
+// 재고 서비스에서 고객이 주문한 책의 재고 감소를 확인
+3. http GET localhost:8082/stocks/*
+
+// 주문 서비스에서 주문한 책을 취소 요청함
+4. http PATCH localhost:8081/reservations/* status="Canceled"
+
+// 주문 서비스에서 고객의 주문 상태가 '취소'임을 확인
+5. http GET localhost:8081/reservations/*
+
+// 재고 서비스에서 고객이 취소 요청한 책의 수량이 증가하였는지 확인한다.
+6. http GET localhost:8082/stocks/*
+
+// 고객 서비스 콘솔을 통해 고객의 주문이 정상적으로 취소 되었는지 확인
 
 ```
 
