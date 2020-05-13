@@ -26,7 +26,16 @@ public class Reservation {
     private String status;
 
     @PostPersist
-    public void onPostPersist(){
+    public void onPostPersist() {
+        try {
+            if (this.getStatus().equals("selfHealingTest")){
+                System.out.println("##### 지연 시작  #####" );
+                Thread.sleep(30000);
+                System.out.println("##### 지연 종료  #####" );
+            }
+        } catch (Exception e) {
+            System.out.println("##### 지연 실패  #####" + e);
+        }
         Requested requested = new Requested();
         requested.setOrderId(this.getId());
         requested.setUserid(this.getUserid());
