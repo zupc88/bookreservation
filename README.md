@@ -595,8 +595,18 @@ mvn spring-boot:run
 
 각 구현체들은 각자의 Git source repository 에 구성되었고, 사용한 CI/CD 플랫폼은 Azure를 사용하였으며, pipeline build script 는 각 서비스 프로젝트 폴더 이하에 azure-pipelines.yml 에 포함되었다.
 
-- 
+- Pipeline 생성
+![pipe](https://user-images.githubusercontent.com/63623995/81764531-c0804780-950c-11ea-9553-402bba09c0ca.png)
 
+- Pipeline 설정
+![pipe2](https://user-images.githubusercontent.com/63623995/81764550-c9711900-950c-11ea-8210-030511bde916.png)
+
+- Release 생성
+![release](https://user-images.githubusercontent.com/63623995/81764553-cbd37300-950c-11ea-94f7-892dc0b68ddc.png)
+
+- Release 설정
+![release2](https://user-images.githubusercontent.com/63623995/81764558-cd04a000-950c-11ea-91a4-018f0c2a3b87.png)
+![release3](https://user-images.githubusercontent.com/63623995/81764561-ce35cd00-950c-11ea-9052-22c52c21e584.png)
 
 ## 동기식 호출 / 서킷 브레이킹 / 장애격리
 
